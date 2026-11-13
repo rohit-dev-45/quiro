@@ -1,0 +1,83 @@
+import { BillingPeriod, Plan } from "@/lib/pricing";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "../ui/card";
+import { cn } from "@/lib/utils";
+import { Badge } from "../ui/badge";
+import { CheckIcon } from "lucide-react";
+
+export function PricingCard({
+    plan,
+    period,
+    className,
+}: {
+    plan: Plan;
+    period: BillingPeriod;
+    className?: string;
+}) {
+    const price = plan.price[period];
+
+    return (
+        <Card
+            className={cn(
+                "relative overflow-visible [--card-spacing:--spacing(7)]",
+                plan.highlighted &&
+                    "shadow-xl ring-2 shadow-brand/25 ring-brand",
+                className,
+            )}
+        >
+            {plan.highlighted ? (
+                <Badge className="absolute -top-2.5 left-7 rounded-md bg-brand font-mono text-[0.625rem] tracking-wider text-brand-foreground uppercase">
+                    Most Popular
+                </Badge>
+            ) : null}
+
+            <CardHeader className="gap-1.5">
+                <CardTitle className="text-lg font-semibold">
+                    {plan.name}
+                </CardTitle>
+                <CardDescription>{plan.description}</CardDescription>
+            </CardHeader>
+
+            <CardContent className="flex flex-col gap-1.5">
+                <p className="flex items-baseline gap-1">
+                    <span className="text-[2.75rem] leading-none font-bold tracking-tight">
+                        ${price}
+                    </span>
+                    <span className="text-sm text-muted-foreground">/Mo</span>
+                </p>
+                {price > 0 && period === "annual" ? (
+                    <p className="text-sm text-muted-foreground">
+                        Billed Annually
+                    </p>
+                ) : null}
+            </CardContent>
+
+            <CardContent></CardContent>
+
+            <CardContent>
+                <ul className="flex flex-col gap-3">
+                    {plan.features.map((feature) => (
+                        <li
+                            key={feature.label}
+                            className="flex items-start gap-3 text-sm"
+                        >
+                            <CheckIcon className="mt-0.5 size-4 shrink-0 text-brand" />
+                            <span
+                                className={cn(
+                                    feature.emphasis && "font-semibold",
+                                )}
+                            >
+                                {feature.label}
+                            </span>
+                        </li>
+                    ))}
+                </ul>
+            </CardContent>
+        </Card>
+    );
+}
