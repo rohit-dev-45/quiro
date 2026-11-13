@@ -9,6 +9,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Badge } from "../ui/badge";
 import { CheckIcon } from "lucide-react";
+import { AuthDialogTrigger } from "../auth/auth-dialog-trigger";
 
 export function PricingCard({
     plan,
@@ -57,7 +58,15 @@ export function PricingCard({
                 ) : null}
             </CardContent>
 
-            <CardContent></CardContent>
+            <CardContent>
+                <AuthDialogTrigger
+                    mode="sign-up"
+                    variant={plan.ctaVariant}
+                    className="h-10 w-full"
+                >
+                    {plan.cta.label}
+                </AuthDialogTrigger>
+            </CardContent>
 
             <CardContent>
                 <ul className="flex flex-col gap-3">

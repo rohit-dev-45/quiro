@@ -4,6 +4,7 @@ import { mainNav } from "@/lib/site-config";
 import { SearchDocsButton } from "../search/search-docs-button";
 import { ThemeToggle } from "../theme-toggle";
 import { MobileNav } from "./mobile-nav";
+import { AuthHeaderActions } from "../auth/auth-header-actions";
 
 export function Header() {
     return (
@@ -28,6 +29,7 @@ export function Header() {
                 <div className="ml-auto flex items-center gap-2">
                     <SearchDocsButton className="hidden lg:inline-flex" />
                     <ThemeToggle />
+                    <AuthHeaderActions />
                     <MobileNav items={mainNav} className="md:hidden" />
                 </div>
             </div>

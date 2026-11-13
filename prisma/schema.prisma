@@ -1,0 +1,288 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  members     Member[]
+  invitations Invitation[]
+
+  role       String?
+  banned     Boolean?  @default(false)
+  banReason  String?
+  banExpires DateTime?
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  activeOrganizationId String?
+
+  impersonatedBy String?
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model RateLimit {
+  id          String @id
+  key         String
+  count       Int
+  lastRequest BigInt
+
+  @@unique([key])
+  @@map("rateLimit")
+}
+
+model Organization {
+  id          String       @id
+  name        String
+  slug        String
+  logo        String?
+  createdAt   DateTime
+  metadata    String?
+  members     Member[]
+  invitations Invitation[]
+
+  @@unique([slug])
+  @@map("organization")
+}
+
+model Member {
+  id             String       @id
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           String       @default("member")
+  createdAt      DateTime
+
+  @@index([organizationId])
+  @@index([userId])
+  @@map("member")
+}
+
+model Invitation {
+  id             String       @id
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String
+  role           String?
+  status         String       @default("pending")
+  expiresAt      DateTime
+  createdAt      DateTime     @default(now())
+  inviterId      String
+  user           User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([email])
+  @@map("invitation")
+}
+
+model Avatar {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  contentType String
+  data        Bytes
+  updatedAt   DateTime @updatedAt
+
+  @@map("avatar")
+}
+
+model AdminLog {
+  id          String   @id @default(cuid())
+  actorId     String?
+  actorName   String?
+  action      String
+  description String
+  targetId    String?
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+  @@map("adminLog")
+}
+
+model AppSetting {
+  id                  String   @id @default("app")
+  allowSignUps        Boolean  @default(true)
+  enforceTwoFactor    Boolean  @default(false)
+  maintenanceMode     Boolean  @default(false)
+  chatRetentionMonths Int?     @default(12)
+  updatedByUserId     String?
+  updatedAt           DateTime @updatedAt
+
+  @@map("appSetting")
+}
+
+model Subscription {
+  id                   String    @id @default(cuid())
+  organizationId       String    @unique
+  stripeCustomerId     String?   @unique
+  stripeSubscriptionId String?   @unique
+  status               String?
+  planId               String    @default("free")
+  priceId              String?
+  interval             String?
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean   @default(false)
+  cardBrand            String?
+  cardLast4            String?
+  cardExpMonth         Int?
+  cardExpYear          Int?
+  source               String    @default("stripe")
+  grantedByUserId      String?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  @@map("subscription")
+}
+
+model Document {
+  id             String         @id @default(cuid())
+  organizationId String
+  userId         String
+  name           String
+  contentType    String
+  sizeBytes      Int
+  pageCount      Int?
+  data           Bytes
+  text           String?
+  status         DocumentStatus @default(PROCESSING)
+  failureReason  String?
+  createdAt      DateTime       @default(now())
+  chats          ChatDocument[]
+
+  @@index([organizationId, createdAt])
+  @@map("document")
+}
+
+enum DocumentStatus {
+  PROCESSING
+  READY
+  FAILED
+}
+
+model Chat {
+  id             String         @id @default(cuid())
+  organizationId String
+  userId         String
+  title          String
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  documents      ChatDocument[]
+  messages       Message[]
+
+  @@index([organizationId, updatedAt])
+  @@map("chat")
+}
+
+model ChatDocument {
+  chatId     String
+  documentId String
+  position   Int
+  chat       Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@id([chatId, documentId])
+  @@index([documentId])
+  @@map("chatDocument")
+}
+
+model Message {
+  id        String           @id @default(cuid())
+  chatId    String
+  chat      Chat             @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  role      MessageRole
+  content   String
+  sources   Json?
+  hidden    Boolean          @default(false)
+  feedback  MessageFeedback?
+  createdAt DateTime         @default(now())
+
+  @@index([chatId, createdAt])
+  @@map("message")
+}
+
+model QuestionEvent {
+  id             String   @id @default(cuid())
+  organizationId String
+  userId         String
+  chatId         String?
+  createdAt      DateTime @default(now())
+
+  @@index([organizationId, createdAt])
+  @@map("questionEvent")
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+}
+
+enum MessageFeedback {
+  UP
+  DOWN
+}

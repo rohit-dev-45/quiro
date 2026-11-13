@@ -1,7 +1,9 @@
 "use client";
 
+import { useSession } from "@/lib/auth-client";
 import { NavItem } from "@/lib/site-config";
 import { useState } from "react";
+import { AuthMode, useAuthDialog } from "../auth/auth-dialog-provider";
 import {
     Sheet,
     SheetClose,
@@ -17,7 +19,7 @@ import { QuiroLogo } from "../brand/docsy-logo";
 import { SearchDocsButton } from "../search/search-docs-button";
 import Link from "next/link";
 
-export function MobileNav({
+function MobileNav({
     items,
     className,
 }: {
@@ -25,14 +27,25 @@ export function MobileNav({
     className?: string;
 }) {
     const [open, setOpen] = useState(false);
+    const { data: session } = useSession();
+    const authDialog = useAuthDialog();
 
-    function requestAuth() {}
+    const [queuedMode, setQueuedMode] = useState<AuthMode | null>(null);
+
+    function requestAuth(mode: AuthMode) {
+        setQueuedMode(mode);
+        setOpen(false);
+    }
 
     return (
         <Sheet
             open={open}
             onOpenChange={setOpen}
-            onOpenChangeComplete={(isOpen) => {}}
+            onOpenChangeComplete={(isOpen) => {
+                if (isOpen || !queuedMode) return;
+                authDialog.open(queuedMode);
+                setQueuedMode(null);
+            }}
         >
             <SheetTrigger
                 render={
@@ -74,11 +87,22 @@ export function MobileNav({
                         </SheetClose>
                     ))}
                 </nav>
-                <SheetFooter className="grid grid-cols-2">
-                    <Button variant="outline">Sign In</Button>
-                    <Button>Try Quiro Free</Button>
-                </SheetFooter>
+                {!session && (
+                    <SheetFooter className="grid grid-cols-2">
+                        <Button
+                            variant="outline"
+                            onClick={() => requestAuth("sign-in")}
+                        >
+                            Sign In
+                        </Button>
+                        <Button onClick={() => requestAuth("sign-up")}>
+                            Try Quiro Free
+                        </Button>
+                    </SheetFooter>
+                )}
             </SheetContent>
         </Sheet>
     );
 }
+
+export { MobileNav };

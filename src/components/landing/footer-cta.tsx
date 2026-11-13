@@ -1,5 +1,6 @@
 import { ArrowRightIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import { AuthDialogTrigger } from "../auth/auth-dialog-trigger";
 
 export function FooterCTA() {
     return (
@@ -22,8 +23,13 @@ export function FooterCTA() {
                     </p>
 
                     <div className="flex flex-col gap-3 sm:flex-row">
-                        Try Quiro free
-                        <ArrowRightIcon data-icon="inline-end" />
+                        <AuthDialogTrigger
+                            mode="sign-up"
+                            className="h-11 bg-brand px-5 text-base text-brand-foreground hover:bg-brand/90 has-data-[icon=inline-end]:pr-5"
+                        >
+                            Try Quiro Free
+                            <ArrowRightIcon data-icon="inline-end" />
+                        </AuthDialogTrigger>
                         <Button
                             variant="outline"
                             className="h-11 px-5 text-base"

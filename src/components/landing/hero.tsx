@@ -4,13 +4,14 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { HeroPreview } from "./hero-preview";
 import { TrustedBy } from "./trusted-by";
+import { AuthDialogTrigger } from "../auth/auth-dialog-trigger";
 
 const PROOF_POINTS = ["Free For 5 Documents", "No Card Required"];
 
 const CTA_CLASSES =
     "h-11 w-full px-5 text-base has-data-[icon=inline-end]:pr-5 has-data-[icon=inline-start]:pl-5 sm:w-auto";
 
-export function Hero() {
+function Hero() {
     return (
         <section className="mx-auto w-full max-w-6xl px-6 pt-16 pb-13 lg:pt-24 lg:pb-19">
             <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
@@ -45,8 +46,13 @@ export function Hero() {
                     </p>
 
                     <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-                        Try Quiro Free
-                        <ArrowRightIcon data-icon="inline-end" />
+                        <AuthDialogTrigger
+                            mode="sign-up"
+                            className={CTA_CLASSES}
+                        >
+                            Try Quiro Free
+                            <ArrowRightIcon data-icon="inline-end" />
+                        </AuthDialogTrigger>
                         <Button
                             variant="outline"
                             className={CTA_CLASSES}
@@ -81,3 +87,5 @@ export function Hero() {
         </section>
     );
 }
+
+export { Hero };

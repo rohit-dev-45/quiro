@@ -7,9 +7,12 @@ import { Pricing } from "@/components/landing/pricing";
 import { Privacy } from "@/components/landing/privacy";
 import { Stats } from "@/components/landing/stats";
 import { Testimonials } from "@/components/landing/testimonials";
+import { redirectIfSignedIn } from "@/lib/session";
 import React from "react";
 
-const Home = () => {
+const Home = async () => {
+    await redirectIfSignedIn();
+
     return (
         <>
             <Hero />
