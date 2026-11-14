@@ -4,7 +4,7 @@ import { SectionHeading } from "./section-heading";
 
 const TESTIMONIALS = [
     {
-        quote: '"I Stopped Re-Reading 80-Page Contracts To Find One Clause. Docsy Answers And Shows Me The Exact Line — I Verify In A Click Instead Of An Hour."',
+        quote: '"I Stopped Re-Reading 80-Page Contracts To Find One Clause. Quiro Answers And Shows Me The Exact Line — I Verify In A Click Instead Of An Hour."',
         name: "Dana Reyes",
         initials: "DR",
         role: "Counsel · Northwind Legal",
@@ -16,7 +16,7 @@ const TESTIMONIALS = [
         role: "Analyst · Meridian Capital",
     },
     {
-        quote: '"When Docsy Can\'t Support A Claim, It Tells Me. That Single Behavior Is Why Our Research Team Actually Trusts It."',
+        quote: '"When Quiro Can\'t Support A Claim, It Tells Me. That Single Behavior Is Why Our Research Team Actually Trusts It."',
         name: "Sara Kim",
         initials: "SK",
         role: "Lead · Atlas Research",

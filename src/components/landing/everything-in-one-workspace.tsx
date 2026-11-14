@@ -14,7 +14,7 @@ const FEATURES = [
         icon: MessageSquareIcon,
         title: "Chat With Citations",
         description:
-            "Streaming Answers Where Every Claim Links To The Exact Line It's Based On. If The Source Isn't There, Docsy Says So.",
+            "Streaming Answers Where Every Claim Links To The Exact Line It's Based On. If The Source Isn't There, Quiro Says So.",
     },
     {
         icon: BookOpenIcon,
@@ -26,7 +26,7 @@ const FEATURES = [
         icon: LayersIcon,
         title: "Multi-Document Search",
         description:
-            "Ask Across Your Whole Library At Once. Docsy Retrieves From The Right Files By Meaning, Not Just Keywords.",
+            "Ask Across Your Whole Library At Once. Quiro Retrieves From The Right Files By Meaning, Not Just Keywords.",
     },
     {
         icon: FileIcon,

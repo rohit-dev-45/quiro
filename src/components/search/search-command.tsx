@@ -139,7 +139,7 @@ function SearchCommand({ className }: { className?: string }) {
 
                         {trimmedQuery && newestChat && (
                             <CommandGroup
-                                heading="Ask Docsy"
+                                heading="Ask Quiro"
                                 className={groupHeading}
                             >
                                 <CommandItem

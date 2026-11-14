@@ -12,7 +12,7 @@ const STEPS = [
         number: "02",
         title: "Ask In Plain Language",
         description:
-            "Ask Across One Document Or Your Entire Library. Docsy Streams Back An Answer And Pulls From Exactly The Right Files.",
+            "Ask Across One Document Or Your Entire Library. Quiro Streams Back An Answer And Pulls From Exactly The Right Files.",
     },
     {
         number: "03",

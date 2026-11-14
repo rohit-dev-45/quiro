@@ -9,8 +9,8 @@ import { SectionHeading } from "./section-heading";
 
 const FAQS = [
     {
-        question: "How Does Docsy Make Sure Answers Are Accurate?",
-        answer: "Every Claim In An Answer Links To The Passage It Came From. Open The Source Reader To See The Exact Highlighted Text And The Page It Sits On. When Your Documents Don't Support An Answer, Docsy Says So Instead Of Guessing.",
+        question: "How Does Quiro Make Sure Answers Are Accurate?",
+        answer: "Every Claim In An Answer Links To The Passage It Came From. Open The Source Reader To See The Exact Highlighted Text And The Page It Sits On. When Your Documents Don't Support An Answer, Quiro Says So Instead Of Guessing.",
     },
     {
         question: "What File Types Can I Upload?",
@@ -21,8 +21,8 @@ const FAQS = [
         answer: "Your Documents Are Encrypted In Transit And At Rest In An Isolated, Per-Workspace Vector Store. They Are Never Used To Train Models, And Deleting A Document Removes Its Embeddings With It.",
     },
     {
-        question: "Can Docsy Search Across Many Documents At Once?",
-        answer: "Yes. Ask A Question Against A Single File Or Your Entire Library, And Docsy Retrieves From The Right Documents By Meaning Rather Than Keyword Matching Alone.",
+        question: "Can Quiro Search Across Many Documents At Once?",
+        answer: "Yes. Ask A Question Against A Single File Or Your Entire Library, And Quiro Retrieves From The Right Documents By Meaning Rather Than Keyword Matching Alone.",
     },
     {
         question: "Does It Integrate With My Existing Tools?",
